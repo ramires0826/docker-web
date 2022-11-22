@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  web:
+    tty: true
+    build: src/
+    restart: always
+    ports:
+      - "1080:8080"
+    volumes:
+      - ./src/nginx:/app
+
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./src/db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+
+networks:
+  default:
+    driver: bridge
