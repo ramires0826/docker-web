@@ -1,40 +1,21 @@
 --------------------
 
-MySQL
-NGINX
-bash
+        С помощью docker-compose поднимаются 2 контейнера, 
+        Первый работает с nginx и php, второй с mysql
+        Nginx слушает 8080 порт, через docker-proxy на хост выдает 1080 порт
+        Файл конфигурации nginx лежит по пути nginx/conf/nginx.conf
+        Файл конфигурации базы данных лежит по пути nginx/conf/.env.php
+        Mysql не смотрит наружу, к нему отправляет запросы контейнер с nginx.
+
+--------------------
+
+        Есть база данных Students, в ней 2 таблицы Men и Woman
+        Таблицы имеют столбцы со значениями Name, Age, id
+        В index.php Выводятся таблицы, есть возможность удалить любого из таблицы, 
+        Либо добавить с рандомными значениями 
+        (файлы с именами лежат по пути nginx/app/include, Age генерируется от 18 до 45)
+        При совпадении Age одной из строки в таблице Men и Age одной из строки в таблице Woman
+        Выводится надпись "<NameMen> and <NameWoman> same age!!"
 
 -------------------
 
-[mysql]
-Create 1 db "Students"
-Create 2 tables "Male" "Female"
-Tables contains "Name" and "Age"
-
-[bash]
-Create script for add to base user
-Create script for remove user from base
-
-[nginx]
-Page show table to really time
-Page show label '"Male.Name" and "Female.Name" same age!'
-
-
-
-/* if(isset($_POST["id"]))
-{
-$conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
-if($conn->connect_error){
-die("Ошибка: " . $conn->connect_error);
-}
-$userid = $conn->real_escape_string($_POST["id"]);
-$sql = "DELETE FROM $tableMen WHERE id = '$userid'";
-if($conn->query($sql)){
-header("Location: index.php");
-}
-$sql = "DELETE FROM $tableWom WHERE id = '$userid'";
-if($conn->query($sql)){
-header("Location: index.php");
-}
-$conn->close();
-} */

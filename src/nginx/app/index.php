@@ -83,8 +83,34 @@
 <!-- ############################################################### -->
         </p></div>
     </div>
+<!-- #####################################   CHECK FOR SAME AGE      -->
     <?php
-        $link -> close();
+        echo "<br><br>";
+        echo "<table>";
+        if($resultM = $link->query("SELECT * FROM $DB_NAME.$DB_TABLE_MEN")){
+            $i = 0;
+            while($rowM = $resultM->fetch_array()){
+                $i++;
+                $i = $rowM["Age"];
+                if($resultW = $link->query("SELECT * FROM $DB_NAME.$DB_TABLE_WOMAN")){
+                    $ii = 0;
+                    while($rowW = $resultW->fetch_array()){
+                        $ii++;
+                        $ii = $rowW["Age"];
+                        if($i==$ii){
+                          echo $rowM["Name"] . " " . " and " . $rowW["Name"] . " same age!!";
+                          echo "<br>";
+                        }
+                    }
+                }
+            }
+        }
+        echo "</table>";
+        $result->close();
+        $resultW->close();
+        $resultM->close();
+        $link->close();
     ?>
+<!-- ############################################################### -->
 </body>
 </html>
