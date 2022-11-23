@@ -1,48 +1,30 @@
 <?php
-    $db_host = "192.168.112.3";
-    $db_user = "db";
-    $db_name = "Students";
-    $db_pass = "12345";
-    $tableMen  = "Men";
-    $tableWom  = "Women";
-    $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+    require_once "/app/conf/.env.php";
+    foreach($config as $key => $value) {
+        $$key=$value;
+    }
+    if(isset($_POST["table"])){
+        $age = rand(18, 45);
 
-    if(isset($_POST["id"]))
-    {
-        if($conn->connect_error){
-              die("Error: " . $conn->connect_error);
+
+
+        include 'MenSpace.php';
+        $name = $MenSpaceName[array_rand($MenSpaceName)];
+        echo $name + 1;
+        $link = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
+        if($link->connect_error){
+            die("Error: " . $link->connect_error);
         }
-        if($result = $conn->query("SELECT * FROM $db_name.$tableMen")){
+        $table_name = $link->real_escape_string($_POST["table"]);
+        if($result = $link->query("SELECT * FROM $DB_NAME.$table_name")){
             while($row = $result->fetch_array()){
                    $id = $row['id']+1;
-               }
+            }
         }
-
-
-
-
-
-        echo ""
-
-
-
-
-
-
-
-        echo "<p>Name: <input type='text' name='name' /></p>
-             <p>Age:  <input type='text' age='age' /></p>
-             <p><input type='submit' name='Add' /></p>";
-
-
-        $sql = "INSERT INTO Men (Name, Age, id) VALUES ($name, $age, $id)";
-
-
-        if($conn->query($sql)){
+        $SQL = "INSERT INTO $table_name (Name, Age, id) VALUES ($name, $age, $id)";
+        if($link->query($SQL)){
             header("Location: index.php");
         }
-
-
-        $conn->close();
+        $link -> close();
     }
 ?>

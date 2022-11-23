@@ -1,25 +1,20 @@
 <?php
-    $db_host = "192.168.112.3";
-    $db_user = "db";
-    $db_name = "Students";
-    $db_pass = "12345";
-    $tableMen  = "Men";
-    $tableWom  = "Women";
-    if(isset($_POST["id"]))
+    require_once "/app/conf/.env.php";
+    foreach($config as $key => $value) {
+        $$key=$value;
+    }
+    if(isset($_POST["id"],$_POST["table"]))
     {
-        $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
-        if($conn->connect_error){
-            die("Ошибка: " . $conn->connect_error);
+        $link = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
+        if($link->connect_error){
+            die("Error: " . $link->connect_error);
         }
-        $userid = $conn->real_escape_string($_POST["id"]);
-        $sql = "DELETE FROM $tableMen WHERE id = '$userid'";
-        if($conn->query($sql)){
+        $userid = $link->real_escape_string($_POST["id"]);
+        $table_name = $link->real_escape_string($_POST["table"]);
+        $SQL = "DELETE FROM $table_name WHERE id = '$userid'";
+        if($link->query($SQL)){
             header("Location: index.php");
         }
-        $sql = "DELETE FROM $tableWom WHERE id = '$userid'";
-        if($conn->query($sql)){
-            header("Location: index.php");
-        }
-        $conn->close();
+        $link->close();
     }
 ?>
